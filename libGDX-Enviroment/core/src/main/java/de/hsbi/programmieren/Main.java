@@ -1,4 +1,4 @@
-package de.hsbi.programmieren.testat;
+package de.hsbi.programmieren;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;

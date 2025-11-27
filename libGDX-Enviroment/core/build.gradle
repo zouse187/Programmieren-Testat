@@ -1,9 +1,6 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
 

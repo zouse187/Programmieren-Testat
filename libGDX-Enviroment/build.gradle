@@ -27,7 +27,14 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  sourceCompatibility = 25
+  sourceCompatibility = 21
+
+  // Prefer Gradle Java toolchains to ensure builds use Java 21 when available.
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(21)
+    }
+  }
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.

@@ -1,8 +1,8 @@
-package de.hsbi.programmieren.testat.lwjgl3;
+package de.hsbi.programmieren.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import de.hsbi.programmieren.testat.Main;
+import de.hsbi.programmieren.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

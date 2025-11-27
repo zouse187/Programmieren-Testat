@@ -14,7 +14,7 @@
  */
 //Note, the above license and copyright applies to this file only.
 
-package de.hsbi.programmieren.testat.lwjgl3;
+package de.hsbi.programmieren.lwjgl3;
 
 import com.badlogic.gdx.Version;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
