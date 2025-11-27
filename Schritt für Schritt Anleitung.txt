@@ -1,0 +1,65 @@
+## 🚀 Schritt-für-Schritt Start
+
+### 1. **Rahmen setzen**
+- Wähle eine **Engine oder Framework**: z. B. **libGDX** (sehr verbreitet für Java-Spiele) oder etwas Einfacheres wie **Java Swing** für 2D-Grafik.  
+- Entscheide dich für ein **Spielkonzept**:  
+  - Punkte sammeln  
+  - Hindernissen ausweichen  
+  - Gegner besiegen  
+  → Wichtig: Es muss **einfach, aber klar** sein.
+
+---
+
+### 2. **Projektstruktur anlegen**
+- Erstelle ein Java-Projekt mit **sauberer Struktur**:
+  - `Game.java` → Einstiegspunkt (Main-Klasse)  
+  - `Player.java` → Spielfigur  
+  - `Enemy.java` → Gegner  
+  - `Level.java` → Level-Logik  
+  - `GameState.java` → Zustände (Start, Running, Game Over)  
+
+---
+
+### 3. **GUI & Leveldesign (Teil a)**
+- Starte mit einem **Spielfeld** (Fenster + Zeichenfläche).  
+- Zeichne einfache Objekte (z. B. Rechtecke oder Bilder).  
+- Implementiere **Levelwechsel** (z. B. nach Punkten oder Tastendruck).  
+- Dokumentiere im Jupyter Notebook:
+  - Screenshots vom Fortschritt  
+  - Kurze Notizen: „Hier habe ich die Punkteanzeige eingebaut…“  
+
+---
+
+### 4. **Spiellogik (Teil b)**
+- Definiere das **Spielziel** (z. B. „Sammle 10 Punkte“).  
+- Implementiere **Steuerung** (Tastatur oder Maus).  
+- Baue **Ereignisse** ein:
+  - Kollision → Punktestand ändern  
+  - Bedingung für „Game Over“  
+- Dokumentiere im Notebook:
+  - Welche Klassen du erstellt hast  
+  - Welche Probleme auftraten (z. B. Kollisionserkennung)  
+
+---
+
+### 5. **Dokumentation im Jupyter Notebook**
+- Nutze **Markdown-Zellen** für Text:
+  - Erklärungen, Designentscheidungen, Probleme.  
+- Nutze **Code-Zellen**:
+  - Du kannst Java-Code-Snippets einfügen (mit IJava-Kernel) oder einfach als Beispiel zeigen.  
+- Exportiere am Ende als **PDF** → das ist deine `documentation.pdf`.
+
+---
+
+### 6. **Abgabe vorbereiten**
+- ZIP-Datei mit:
+  - Quellcode  
+  - README.txt (wie starten)  
+  - `documentation.ipynb` + `documentation.pdf`  
+  - ggf. Video oder Live-Demo  
+
+---
+
+👉 Mein Tipp: Fang mit einem **Mini-Spiel** an (z. B. Spielfigur bewegt sich mit Pfeiltasten und sammelt Punkte).
+Wenn das läuft, baue Levelwechsel und Zustände ein. Dokumentiere **jeden Schritt sofort im Notebook**,
+dann musst du am Ende nichts nachtragen.  
