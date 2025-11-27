@@ -1,6 +1,8 @@
 apply plugin: 'application'
 
-mainClassName = 'de.hsbi.programmieren.testat.Main'
+application {
+    mainClassName = 'de.hsbi.programmieren.testat.Main'
+}
 
 dependencies {
     implementation project(':core')
