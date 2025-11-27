@@ -1,32 +1,57 @@
 package de.hsbi.programmieren;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
+    private OrthographicCamera camera;
     private SpriteBatch batch;
-    private Texture image;
+    private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
+
+    private float playerX = 100;
+    private float playerY = 100;
+    private int points = 0;
 
     @Override
     public void create() {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 600);
+
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        shapeRenderer = new ShapeRenderer();
+        font = new BitmapFont();
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        // Bildschirm löschen
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        // Text und Spieler zeichnen
         batch.begin();
-        batch.draw(image, 140, 210);
+        font.draw(batch, "Points: " + points, 10, 580);
         batch.end();
+
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.rect(playerX, playerY, 50, 50); // Spieler als Quadrat
+        shapeRenderer.end();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
+        shapeRenderer.dispose();
+        font.dispose();
     }
 }
