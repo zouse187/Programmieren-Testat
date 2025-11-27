@@ -14,6 +14,7 @@ subprojects {
     apply plugin: 'java-library'
 
     sourceCompatibility = 25
+    targetCompatibility = 25
 
     java {
         toolchain {
