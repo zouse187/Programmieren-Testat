@@ -3,3 +3,6 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.1"
     implementation "com.badlogicgames.gdx:gdx-platform:1.12.1:natives-desktop"
 }
+apply plugin: 'application'
+
+mainClassName = 'de.hsbi.programmerinnen.testat.Main'
