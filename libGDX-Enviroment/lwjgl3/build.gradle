@@ -4,6 +4,10 @@ application {
     mainClassName = 'de.hsbi.programmieren.testat.Main'
 }
 
+run {
+    classpath = sourceSets.main.runtimeClasspath + project(':core').sourceSets.main.runtimeClasspath
+}
+
 dependencies {
     implementation project(':core')
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.1"
