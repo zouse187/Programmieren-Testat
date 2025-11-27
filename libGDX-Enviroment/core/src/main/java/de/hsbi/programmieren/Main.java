@@ -15,62 +15,54 @@ public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
 
-    private float playerX = 100;
-    private float playerY = 100;
-    private int points = 0;
+    private Player player;
 
     @Override
     public void create() {
+        // Kamera einrichten
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
+        camera.setToOrtho(false, 1000, 1000);
 
+        // Renderer und Schriftart initialisieren
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
+
+        // Spieler initialisieren
+        player = new Player(480);
     }
 
+    // Render-Schleife
     @Override
     public void render() {
         handleInput();
 
+        // Hintergrundfarbe setzen
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
 
-        // Spielfigur zeichnen
+        // Spieler zeichnen
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 1, 0, 1);
-        shapeRenderer.rect(playerX, playerY, 40, 40);
+        player.render(shapeRenderer);
         shapeRenderer.end();
 
         // Punktestand anzeigen
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Punkte: " + points, 10, 580);
+        font.draw(batch, "Punkte: " + player.getPoints(), 10, 980);
         batch.end();
     }
 
+    // Eingaben verarbeiten
     private void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            playerX -= 3;
-            points++;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerX += 3;
-            points++;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            playerY += 3;
-            points++;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            playerY -= 3;
-            points++;
-        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) player.moveLeft();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) player.moveRight();
     }
 
+    // Ressourcen freigeben
     @Override
     public void dispose() {
         batch.dispose();
