@@ -2,6 +2,7 @@ package de.hsbi.programmieren;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,22 +31,44 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
-        // Bildschirm löschen
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        handleInput();
+
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
 
-        // Text und Spieler zeichnen
-        batch.begin();
-        font.draw(batch, "Points: " + points, 10, 580);
-        batch.end();
-
+        // Spielfigur zeichnen
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(playerX, playerY, 50, 50); // Spieler als Quadrat
+        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.rect(playerX, playerY, 40, 40);
         shapeRenderer.end();
+
+        // Punktestand anzeigen
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        font.draw(batch, "Punkte: " + points, 10, 580);
+        batch.end();
+    }
+
+    private void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            playerX -= 3;
+            points++;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            playerX += 3;
+            points++;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            playerY += 3;
+            points++;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            playerY -= 3;
+            points++;
+        }
     }
 
     @Override
