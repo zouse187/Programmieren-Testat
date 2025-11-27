@@ -5,4 +5,4 @@ dependencies {
 }
 apply plugin: 'application'
 
-mainClassName = 'de.hsbi.programmerinnen.testat.Main'
+mainClassName = 'de.hsbi.programmerinnen.testat.Main.java'
