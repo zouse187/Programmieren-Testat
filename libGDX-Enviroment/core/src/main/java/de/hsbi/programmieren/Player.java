@@ -21,11 +21,17 @@ public class Player {
     // Bewegung der Spielfigur nach links
     public void moveLeft() {
         x -= 3;
+        if(x == 0) {
+            x += 3;
+        }
     }
 
     // Bewegung der Spielfigur nach rechts
     public void moveRight() {
         x += 3;
+        if(x == 939) {
+            x -= 3;
+        }
     }
 
     // Spielfigur zeichnen
