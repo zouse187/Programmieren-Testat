@@ -1,4 +1,4 @@
-package de.hsbi.programmieren;
+ package de.hsbi.programmieren;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -13,6 +13,28 @@ public class Player {
         this.points = 0;
     }
 
+    // getter für Position und Größe (für Kollisionserkennung)
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return 60f;
+    }
+
+    public float getHeight() {
+        return 70f;
+    }
+
+    // Punkte erhöhen
+    public void addPoints(int n) {
+        this.points = Math.max(0, this.points + n);
+    }
+
     // getter für Punktestand
     public int getPoints() {
         return points;
@@ -20,17 +42,17 @@ public class Player {
 
     // Bewegung der Spielfigur nach links
     public void moveLeft() {
-        x -= 3;
+        x -= 5;
         if(x == 0) {
-            x += 3;
+            x += 5;
         }
     }
 
     // Bewegung der Spielfigur nach rechts
     public void moveRight() {
-        x += 3;
-        if(x == 939) {
-            x -= 3;
+        x += 5;
+        if(x == 940) {
+            x -= 5;
         }
     }
 

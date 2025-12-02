@@ -16,6 +16,8 @@ public class Main extends ApplicationAdapter {
     private BitmapFont font;
 
     private Player player;
+    private Coins coins;
+    private Enemy enemy;
 
     @Override
     public void create() {
@@ -30,6 +32,10 @@ public class Main extends ApplicationAdapter {
 
         // Spieler initialisieren
         player = new Player(480);
+        // Coins manager initialisieren (world size entspricht der Kamera-Größe)
+        coins = new Coins(1000, 1000);
+
+        enemy = new Enemy( 1000, 1000);
     }
 
     // Render-Schleife
@@ -37,15 +43,28 @@ public class Main extends ApplicationAdapter {
     public void render() {
         handleInput();
 
+        float delta = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        // Coins: spawn, bewegen, entfernen
+        coins.update(delta);
+        // Prüfe, ob der Spieler Coins eingesammelt hat
+        coins.collectCollisions(player);
+
+        // Enemys: eigene Spawn-/Update-Logik und Kollisionen
+        enemy.update(delta);
+        // Prüfe, ob der Spieler mit einem Enemy kollidiert (Punktabzug)
+        enemy.badCollisions(player);
+
         // Hintergrundfarbe setzen
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
 
-        // Spieler zeichnen
+        // Zeichne Coins und Spieler im selben ShapeRenderer-Durchlauf
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        coins.render(shapeRenderer);
+        enemy.render(shapeRenderer);
         player.render(shapeRenderer);
         shapeRenderer.end();
 
