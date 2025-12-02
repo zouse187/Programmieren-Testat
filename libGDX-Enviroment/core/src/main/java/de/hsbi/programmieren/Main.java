@@ -34,7 +34,7 @@ public class Main extends ApplicationAdapter {
         player = new Player(480);
         // Coins manager initialisieren (world size entspricht der Kamera-Größe)
         coins = new Coins(1000, 1000);
-
+        // Enemy manager initialisieren
         enemy = new Enemy( 1000, 1000);
     }
 
