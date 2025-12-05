@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+// manages falling coins that the player can collect
 public class Coins {
-	private final ArrayList<Coin> coins;
-	private final Random random;
-	private final float worldWidth;
+	private final ArrayList<Coin> coins; // list of active coins
+	private final Random random; 
+	private final float worldWidth; 
 	private final float worldHeight;
 
 	private float spawnInterval = 1.8f; // seconds between spawns
@@ -18,6 +19,7 @@ public class Coins {
 	private final float coinHeight = 20f;
 	private final float fallSpeed = 150f; // pixels per second
 
+	// constructor
 	public Coins(float worldWidth, float worldHeight) {
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
