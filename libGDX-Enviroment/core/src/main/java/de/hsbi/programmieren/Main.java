@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -28,14 +29,19 @@ public class Main extends ApplicationAdapter {
         // Renderer und Schriftart initialisieren
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
+
+        // vorhandene BitmapFont erzeugen und skalieren (größere Anzeige)
         font = new BitmapFont();
+        font.getData().setScale(2.0f); // Schrift 2x so groß
+        // Linear-Filter setzen, damit die skalierte Schrift weniger pixelig wirkt
+        font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         // Spieler initialisieren
         player = new Player(480);
         // Coins manager initialisieren (world size entspricht der Kamera-Größe)
         coins = new Coins(1000, 1000);
         // Enemy manager initialisieren
-        enemy = new Enemy( 1000, 1000);
+        enemy = new Enemy(1000, 1000);
     }
 
     // Render-Schleife
@@ -68,10 +74,11 @@ public class Main extends ApplicationAdapter {
         player.render(shapeRenderer);
         shapeRenderer.end();
 
-        // Punktestand anzeigen
+        // Punktestand anzeigen (oben links, Y = viewportHeight - margin)
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Punkte: " + player.getPoints(), 10, 980);
+        float yPos = camera.viewportHeight - 20; // 20 Pixel Abstand zur Oberkante
+        font.draw(batch, "Punkte: " + player.getPoints(), 10, yPos);
         batch.end();
     }
 

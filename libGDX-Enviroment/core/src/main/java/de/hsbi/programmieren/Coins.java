@@ -1,25 +1,26 @@
 package de.hsbi.programmieren;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-// manages falling coins that the player can collect
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+// Coins verwaltet fallende Münzen, die der Spieler einsammeln kann.
 public class Coins {
-	private final ArrayList<Coin> coins; // list of active coins
+	private final ArrayList<Coin> coins;
 	private final Random random; 
 	private final float worldWidth; 
 	private final float worldHeight;
 
-	private float spawnInterval = 1.8f; // seconds between spawns
+	private float spawnInterval = 1.8f;
 	private float spawnTimer = 0f;
 
 	private final float coinWidth = 20f;
 	private final float coinHeight = 20f;
-	private final float fallSpeed = 150f; // pixels per second
+	private final float fallSpeed = 150f;
 
-	// constructor
+	// Konstruktor
 	public Coins(float worldWidth, float worldHeight) {
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
@@ -27,7 +28,8 @@ public class Coins {
 		this.random = new Random();
 	}
 
-	// call every frame with delta time
+	// Update-Methode: spawnt neue Coins, bewegt existierende nach unten
+	// und entfernt sie, wenn sie aus dem Bildschirm gefallen sind
 	public void update(float delta) {
 		spawnTimer += delta;
 		if (spawnTimer >= spawnInterval) {
@@ -35,7 +37,7 @@ public class Coins {
 			spawnCoin();
 		}
 
-		// update coins and remove those below the screen
+		// update coins and entfernt die, die das Fenster verlassen haben
 		Iterator<Coin> it = coins.iterator();
 		while (it.hasNext()) {
 			Coin c = it.next();
@@ -46,6 +48,7 @@ public class Coins {
 		}
 	}
 
+	// rendert alle Coins
 	public void render(ShapeRenderer renderer) {
 		for (Coin c : coins) {
 			c.render(renderer);
@@ -64,19 +67,23 @@ public class Coins {
 		}
 	}
 
+	// einfache AABB-Kollisionsprüfung
 	private boolean overlaps(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh) {
 		return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
 	}
 
+	// erzeugt einen neuen Coin an einer zufälligen X-Position oben im Bildschirm
 	private void spawnCoin() {
 		float x = random.nextFloat() * (worldWidth - coinWidth);
 		float y = worldHeight; // start at top
 		coins.add(new Coin(x, y, coinWidth, coinHeight, fallSpeed));
 	}
 
+	// innere Klasse für einzelne Coin-Instanzen
 	private static class Coin {
 		float x, y, width, height, speed;
 
+		// Konstruktor
 		Coin(float x, float y, float width, float height, float speed) {
 			this.x = x;
 			this.y = y;
@@ -85,10 +92,12 @@ public class Coins {
 			this.speed = speed;
 		}
 
+		// aktualisiert die Position des Coins
 		void update(float delta) {
 			y -= speed * delta;
 		}
 
+		// rendert den Coin als gelbes Rechteck
 		void render(ShapeRenderer renderer) {
 			renderer.setColor(1f, 0.9f, 0f, 1f);
 			renderer.rect(x, y, width, height);
