@@ -20,6 +20,11 @@ public class Main extends ApplicationAdapter {
     private Coins coins;
     private Enemy enemy;
 
+    private int currentLevel = 1; // Startlevel
+    private final int LEVEL_THRESHOLD = 15; // Punkte, die für Level 2 erreicht werden müssen
+    private float levelChangeTimer = 0f; // Timer für eine kurze Pause/Anzeige
+    private final float LEVEL_CHANGE_DURATION = 2.0f; // 2 Sekunden Levelwechsel-Pause
+
     @Override
     public void create() {
         // Kamera einrichten
@@ -50,29 +55,60 @@ public class Main extends ApplicationAdapter {
         handleInput();
 
         float delta = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
-        // Coins: spawn, bewegen, entfernen
-        coins.update(delta);
-        // Prüfe, ob der Spieler Coins eingesammelt hat
-        coins.collectCollisions(player);
+        // **********************************************
+    // NEU: Levelwechsel-Logik
+    // **********************************************
+    if (currentLevel == 1 && player.getPoints() >= LEVEL_THRESHOLD) {
+        currentLevel = 2;
+        // Gegner-Parameter für Level 2 setzen (mehr Spawns)
+        enemy.setSpawnInterval(1.2f); // Verkürze das Spawn-Intervall (mehr Gegner)
+        enemy.setFallSpeed(250f);     // Schnellere Gegner
+        levelChangeTimer = LEVEL_CHANGE_DURATION;
+    }
 
-        // Enemys: eigene Spawn-/Update-Logik und Kollisionen
-        enemy.update(delta);
-        // Prüfe, ob der Spieler mit einem Enemy kollidiert (Punktabzug)
-        enemy.badCollisions(player);
+    if (levelChangeTimer > 0) {
+        // Levelwechsel-Pause
+        levelChangeTimer -= delta;
 
-        // Hintergrundfarbe setzen
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
+        // Level 2 Hintergrundfarbe
+        Gdx.gl.glClearColor(0.2f, 0.1f, 0.1f, 1); // Rot-Dunkelrot für Level 2
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        // Große Anzeige des Levelwechsels
+        font.getData().setScale(3.0f); // Größere Schrift
+        font.draw(batch, "LEVEL 2", camera.viewportWidth / 2 - 80, camera.viewportHeight / 2);
+        font.getData().setScale(2.0f); // Zurück zur normalen Größe
+        batch.end();
+        return; // Breche die normale Render- und Update-Logik ab
+    }
+    // **********************************************
 
-        // Zeichne Coins und Spieler im selben ShapeRenderer-Durchlauf
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        coins.render(shapeRenderer);
-        enemy.render(shapeRenderer);
-        player.render(shapeRenderer);
-        shapeRenderer.end();
+    handleInput();
+
+    // Coins: spawn, bewegen, entfernen
+    coins.update(delta);
+    // Prüfe, ob der Spieler Coins eingesammelt hat
+    coins.collectCollisions(player);
+
+    // Enemys: eigene Spawn-/Update-Logik und Kollisionen
+    enemy.update(delta);
+    // Prüfe, ob der Spieler mit einem Enemy kollidiert (Punktabzug)
+    enemy.badCollisions(player);
+
+    // **********************************************
+    // GEÄNDERT: Hintergrundfarbe Level 1 oder 2
+    // **********************************************
+    if (currentLevel == 1) {
+        Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1); // Dunkelblau (Level 1)
+    } else {
+        Gdx.gl.glClearColor(0.2f, 0.1f, 0.1f, 1); // Dunkelrot (Level 2)
+    }
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+    camera.update();
 
         // Punktestand anzeigen (oben links, Y = viewportHeight - margin)
         batch.setProjectionMatrix(camera.combined);
