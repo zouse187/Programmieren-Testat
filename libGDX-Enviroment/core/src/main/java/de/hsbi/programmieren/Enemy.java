@@ -25,7 +25,7 @@ public class Enemy {
     // Eigenschaften der Gegner
     private final float enemyWidth = 30f;
     private final float enemyHeight = 25f;
-    private final float fallSpeed = 180f; // Fallgeschwindigkeit in Pixel/s
+    private float fallSpeed = 180f; // Fallgeschwindigkeit in Pixel/s
 
     public Enemy(float worldWidth, float worldHeight) {
         this.worldWidth = worldWidth;
@@ -33,6 +33,24 @@ public class Enemy {
         this.enemies = new ArrayList<>();
         this.random = new Random();
     }
+/**
+     * Setzt das Intervall, in dem neue Gegner erzeugt werden (Level-Design).
+     */
+    public void setSpawnInterval(float newInterval) {
+        this.spawnInterval = newInterval;
+    }
+    
+    /**
+     * Setzt die Fallgeschwindigkeit der Gegner (Level-Design).
+     */
+    public void setFallSpeed(float newSpeed) {
+        this.fallSpeed = newSpeed;
+    }
+    
+    /**
+     * Update: spawnt neue Gegner und bewegt existierende nach unten.
+    // ... Rest der Klasse
+
 
     /**
      * Update: spawnt neue Gegner und bewegt existierende nach unten.
