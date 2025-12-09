@@ -25,6 +25,8 @@ public class Main extends ApplicationAdapter {
     private float levelChangeTimer = 0f; // Timer für eine kurze Pause/Anzeige
     private final float LEVEL_CHANGE_DURATION = 2.0f; // 2 Sekunden Levelwechsel-Pause
 
+    private boolean gameState = true;
+
     @Override
     public void create() {
         // Kamera einrichten
@@ -52,6 +54,9 @@ public class Main extends ApplicationAdapter {
     // Render-Schleife
     @Override
     public void render() {
+        if (gameState == false) {
+            return; // Spiel ist vorbei, keine Updates mehr
+        }
         handleInput();
 
         float delta = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
@@ -95,8 +100,25 @@ public class Main extends ApplicationAdapter {
 
         // Enemys: eigene Spawn-/Update-Logik und Kollisionen
         enemy.update(delta);
+
         // Prüfe, ob der Spieler mit einem Enemy kollidiert (Punktabzug)
-        enemy.badCollisions(player);
+        if (enemy.badCollisions(player) == true) {
+            gameState = false;
+
+            // 'Game Over' Hintergrundfarbe
+            Gdx.gl.glClearColor(0.8f, 0.3f, 0.3f, 1); // Hellrot für 'Game Over'
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            batch.begin();
+            // Große Anzeige des Levelwechsels
+            font.getData().setScale(3.0f); // Größere Schrift
+            font.draw(batch, "Game Over", camera.viewportWidth / 2 - 110, camera.viewportHeight / 2);
+            font.getData().setScale(2.0f); // Zurück zur normalen Größe
+            batch.end();
+            return; // Breche die normale Render- und Update-Logik ab
+        }
 
         // **********************************************
         // GEÄNDERT: Hintergrundfarbe Level 1 oder 2
@@ -123,6 +145,12 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         float yPos = camera.viewportHeight - 20; // 20 Pixel Abstand zur Oberkante
         font.draw(batch, "Punkte: " + player.getPoints(), 10, yPos);
+
+        // Level rechts oben
+        String levelText = "Level: " + currentLevel;
+        float textWidth = font.getRegion().getRegionWidth(); // grobe Breite
+        font.draw(batch, levelText, camera.viewportWidth - 125, camera.viewportHeight - 20);
+
         batch.end();
     }
 

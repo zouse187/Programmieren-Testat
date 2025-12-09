@@ -1,9 +1,10 @@
 package de.hsbi.programmieren;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Enemy verwaltet feindliche Einheiten, die ähnlich wie Coins von oben fallen,
@@ -84,19 +85,19 @@ public class Enemy {
         }
     }
 
-    /**
-     * Prüft Kollisionen zwischen Player und Gegnern.
-     * Entfernt getroffene Gegner und zieht dem Player einen Punkt ab.
-     */
-    public void badCollisions(Player player) {
-        Iterator<EnemyUnit> it = enemies.iterator();
+   //Prüft Kollisionen zwischen Player und Gegnern.
+   //Entfernt getroffene Gegner und gibt true zurück, wenn eine Kollision passiert ist.
+    public boolean badCollisions(Player player) {
+    Iterator<EnemyUnit> it = enemies.iterator();
         while (it.hasNext()) {
             EnemyUnit e = it.next();
-            if (overlaps(e.x, e.y, e.width, e.height, player.getX(), player.getY(), player.getWidth(), player.getHeight())) {
+            if (overlaps(e.x, e.y, e.width, e.height,
+                        player.getX(), player.getY(), player.getWidth(), player.getHeight())) {
                 it.remove();
-                player.addPoints(-1); // Punktabzug bei Kontakt
+                return true; // Kollision → Game Over
             }
         }
+        return false; // keine Kollision
     }
 
     // AABB-Kollisionstest (Axis-Aligned Bounding Box)

@@ -1,4 +1,4 @@
- package de.hsbi.programmieren;
+package de.hsbi.programmieren;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
