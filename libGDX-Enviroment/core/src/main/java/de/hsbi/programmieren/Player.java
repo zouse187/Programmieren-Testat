@@ -13,6 +13,10 @@ public class Player {
         this.points = 0;
     }
 
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     // getter für Position und Größe (für Kollisionserkennung)
     public float getX() {
         return x;
