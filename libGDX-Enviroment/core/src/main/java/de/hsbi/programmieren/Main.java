@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage; // Stage verwaltet Actors und Input für Scene2d UI
+import com.badlogic.gdx.scenes.scene2d.ui.Skin; // Skin enthält Styles, Drawables und Fonts für Widgets
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton; // TextButton ist ein UI-Widget mit Text
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener; // Listener für Zustandsänderungen (z. B. Klick)
+import com.badlogic.gdx.utils.viewport.ScreenViewport; // Viewport, der die Stage an Bildschirmgröße anpasst
+
 
 public class Main extends ApplicationAdapter {
     private OrthographicCamera camera;
@@ -21,11 +27,17 @@ public class Main extends ApplicationAdapter {
     private Enemy enemy;
 
     private int currentLevel = 1; // Startlevel
-    private final int LEVEL_THRESHOLD = 15; // Punkte, die für Level 2 erreicht werden müssen
+    private final int LEVEL_THRESHOLD1 = 15; // Punkte, die für Level 2 erreicht werden müssen
+    private final int LEVEL_THRESHOLD2 = 40; // Punkte, die fürs gewinnen erreicht werden müssen
     private float levelChangeTimer = 0f; // Timer für eine kurze Pause/Anzeige
     private final float LEVEL_CHANGE_DURATION = 2.0f; // 2 Sekunden Levelwechsel-Pause
 
     private boolean gameState = true;
+
+    private Stage stage; // Die Stage, auf der UI-Elemente liegen
+    private Skin skin;   // Das Skin, das das Aussehen der Widgets definiert
+    private TextButton button; // Der Button selbst
+
 
     @Override
     public void create() {
@@ -49,6 +61,65 @@ public class Main extends ApplicationAdapter {
         coins = new Coins(1000, 1000);
         // Enemy manager initialisieren
         enemy = new Enemy(1000, 1000);
+
+        
+        // Stage initialisieren mit einem ScreenViewport (passt sich an Fenstergröße an)
+        stage = new Stage(new ScreenViewport());
+
+        // Stage als Input-Processor setzen, damit Maus/Touch-Events an die Stage gehen
+        Gdx.input.setInputProcessor(stage);
+
+        // Skin aus den internen Assets laden (uiskin.json muss im assets-Ordner liegen)
+        skin = new Skin(Gdx.files.internal("libGDX-Enviroment\\assets\\ui\\uiskin.json"));
+
+        // TextButton erstellen: sichtbarer Text "Klick mich" und das geladene Skin verwenden
+        button = new TextButton("Restart", skin);
+
+        // Position des Buttons in Stage-Koordinaten setzen (x=100, y=100)
+        button.setPosition(220, 100);
+
+        // Größe des Buttons setzen (Breite=200, Höhe=50)
+        button.setSize(200, 50);
+
+        // Listener hinzufügen: reagiert auf Zustandsänderungen wie Klicks
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                gameState = true;
+                currentLevel = 1;
+                player.setPoints(0);
+                enemy.setSpawnInterval(2.6f); // Verkürze das Spawn-Intervall (mehr Gegner)
+                enemy.setFallSpeed(180f);
+
+                camera.update();
+
+                // Zeichne Coins und Spieler im selben ShapeRenderer-Durchlauf
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                coins.render(shapeRenderer);
+                enemy.render(shapeRenderer);
+                player.render(shapeRenderer);
+                shapeRenderer.end();
+
+                // Punktestand anzeigen (oben links, Y = viewportHeight - margin)
+                batch.setProjectionMatrix(camera.combined);
+                batch.begin();
+                float yPos = camera.viewportHeight - 20; // 20 Pixel Abstand zur Oberkante
+                font.draw(batch, "Punkte: " + player.getPoints(), 10, yPos);
+
+                // Level rechts oben
+                String levelText = "Level: " + currentLevel;
+                float textWidth = font.getRegion().getRegionWidth(); // grobe Breite
+                font.draw(batch, levelText, camera.viewportWidth - 125, camera.viewportHeight - 20);
+
+                batch.end();
+
+            }
+        });
+
+        // Button der Stage hinzufügen, damit er gezeichnet und aktualisiert wird
+        stage.addActor(button);
+
     }
 
     // Render-Schleife
@@ -63,7 +134,7 @@ public class Main extends ApplicationAdapter {
         // **********************************************
         // NEU: Levelwechsel-Logik
         // **********************************************
-        if (currentLevel == 1 && player.getPoints() >= LEVEL_THRESHOLD) {
+        if (currentLevel == 1 && player.getPoints() >= LEVEL_THRESHOLD1) {
             currentLevel = 2;
             // Gegner-Parameter für Level 2 setzen (mehr Spawns)
             enemy.setSpawnInterval(0.5f); // Verkürze das Spawn-Intervall (mehr Gegner)
@@ -91,6 +162,32 @@ public class Main extends ApplicationAdapter {
         }
         // **********************************************
 
+        if (player.getPoints() >= LEVEL_THRESHOLD2) {
+            gameState = false;
+
+            // Gewonnen Hintergrundfarbe
+            Gdx.gl.glClearColor(0f, 1f, 0f, 1); // Grün für Gewonnen
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            batch.begin();
+            // Große Anzeige wenn Spielgewonnen
+            font.getData().setScale(3.0f); // Größere Schrift
+            font.draw(batch, "Gewonnen", camera.viewportWidth / 2 - 90, camera.viewportHeight / 2);
+            font.getData().setScale(2.0f); // Zurück zur normalen Größe
+            batch.end();
+
+            // Stage aktualisieren: verarbeitet Input und Animationen (deltaTime sorgt für zeitbasiertes Verhalten)
+            stage.act(Gdx.graphics.getDeltaTime());
+
+            // Stage zeichnen: alle Actors (inkl. Button) werden gerendert
+            stage.draw();
+
+
+            return; // Breche die normale Render- und Update-Logik ab 
+        }
+
         handleInput();
 
         // Coins: spawn, bewegen, entfernen
@@ -117,6 +214,14 @@ public class Main extends ApplicationAdapter {
             font.draw(batch, "Game Over", camera.viewportWidth / 2 - 110, camera.viewportHeight / 2);
             font.getData().setScale(2.0f); // Zurück zur normalen Größe
             batch.end();
+
+            // Stage aktualisieren: verarbeitet Input und Animationen (deltaTime sorgt für zeitbasiertes Verhalten)
+            stage.act(Gdx.graphics.getDeltaTime());
+
+            // Stage zeichnen: alle Actors (inkl. Button) werden gerendert
+            stage.draw();
+
+
             return; // Breche die normale Render- und Update-Logik ab
         }
 
@@ -148,7 +253,6 @@ public class Main extends ApplicationAdapter {
 
         // Level rechts oben
         String levelText = "Level: " + currentLevel;
-        float textWidth = font.getRegion().getRegionWidth(); // grobe Breite
         font.draw(batch, levelText, camera.viewportWidth - 125, camera.viewportHeight - 20);
 
         batch.end();
@@ -166,5 +270,10 @@ public class Main extends ApplicationAdapter {
         batch.dispose();
         shapeRenderer.dispose();
         font.dispose();
+
+        // Ressourcen freigeben: wichtig, um Speicherlecks zu vermeiden
+        stage.dispose(); // gibt Stage-Ressourcen frei
+        skin.dispose();  // gibt Texturen/Fonts des Skins frei
+
     }
 }
