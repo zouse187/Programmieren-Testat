@@ -42,9 +42,9 @@ assets/ui/ ├─ uiskin.json      # Skin-Definition für UI ├─ uiskin.atlas
    ```bash
    ./gradlew build
 
-
-- Desktop-Version starten:
-./gradlew lwjgl3:run
+  - Und Desktop-Version starten:
+    ```bash
+    ./gradlew lwjgl3:run
 
 
 
