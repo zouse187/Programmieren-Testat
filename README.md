@@ -46,6 +46,8 @@ assets/ui/ ├─ uiskin.json      # Skin-Definition für UI ├─ uiskin.atlas
     ```bash
     ./gradlew lwjgl3:run
 
+5. Alternativ kannst du auch den **Installer öffnen** und einfach dem **Installationsassistenten folgen**, der dich Schritt für Schritt durch die Einrichtung führt.
+
 
 
 🎨 Eigene Skins
