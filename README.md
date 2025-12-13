@@ -1,33 +1,72 @@
 # Programmieren-Testat
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Ein kleines 2D-Spiel mit **LibGDX**, entwickelt im Rahmen des Programmieren‑Testats.  
+Der Spieler sammelt Münzen, weicht Gegnern aus und steigt in höhere Level auf.  
+Bei einer Kollision mit einem Gegner endet das Spiel mit **Game Over** – ein Restart‑Button erlaubt den Neustart.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+---
 
-## Platforms
+## 🎮 Features
+- Steuerung mit **Pfeiltasten** oder **A/D**
+- Münzen sammeln → Punkte erhöhen
+- Levelsystem:
+  - Level 1: langsame Gegner, weniger Spawns
+  - Level 2: schnellere Gegner, häufigere Spawns
+- Anzeige von **Punkten** (oben links) und **Level** (oben rechts)
+- **Game Over** bei Gegnerkontakt
+- **Restart‑Button** zum Neustart
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+---
 
-## Gradle
+## 🛠️ Projektstruktur
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+core/ ├─ src/main/java/de/hsbi/programmieren/ │ ├─ Main.java        # Einstiegspunkt, Render-Loop │   
+                                                ├─ Player.java      # Spieler-Logik │   
+                                                ├─ Coins.java       # Münzen-Logik │   
+                                                ├─ Enemy.java       # Gegner-Logik (inkl. Kollisionen) │   
+assets/ui/ ├─ uiskin.json      # Skin-Definition für UI ├─ uiskin.atlas ├─ default.fnt ├─ default.png
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+---
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+## ▶️ Ausführen
+1. **LibGDX herunterladen und installieren**  
+   Lade dir das Framework von der offiziellen Seite herunter:  
+   👉 [https://libgdx.com](https://libgdx.com)
+
+   Dort findest du den **Setup-Tool** und die Dokumentation, um ein LibGDX‑Projekt einzurichten.
+
+2. Stelle sicher, dass **Java 21+** installiert ist.
+  - ACHTUNG!!! **Java 25** funktioniert stand jetzt (12.12.2025) noch nicht mit libGDX.
+
+3. Projekt mit Gradle bauen:
+   ```bash
+   ./gradlew build
+
+4. Desktop-Version starten:
+    ```bash
+    ./gradlew lwjgl3:run
+
+5. Alternativ kannst du auch den **Installer öffnen** und einfach dem **Installationsassistenten folgen**, der dich Schritt für Schritt durch die Einrichtung führt.
+
+
+
+🎨 Eigene Skins
+- Alle UI‑Elemente (Buttons, Labels etc.) nutzen ein Skin (uiskin.json).
+- Du kannst eigene Skins erstellen, indem du eine neue JSON‑Datei mit eigenen Fonts und Texturen in assets/ ablegst:
+Skin skin = new Skin(Gdx.files.internal("myskin.json"));
+
+
+
+📚 Abhängigkeiten
+- LibGDX Framework
+- Gradle Buildsystem
+- Standard‑Skin (uiskin.json) aus dem LibGDX‑Skin‑Repository
+
+🚀 Nächsten eventuelle Schritte
+- Mehr Level hinzufügen
+- Soundeffekte für Münzen und Gegner
+- Highscore‑System
+- Eigene Grafiken für Spieler, Münzen und Gegner
+
+👨‍💻 Autor
+Projekt von Manuel Borghardt, Darnell Borghardt, Joel Jantschik und Leonid Nikkel

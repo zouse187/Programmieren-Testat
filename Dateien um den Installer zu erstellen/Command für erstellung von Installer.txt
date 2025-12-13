@@ -1,0 +1,11 @@
+jpackage `
+  --type exe `
+  --name "CoinCollector" `
+  --app-version "1.0.0" `
+  --input ".\package_input" `
+  --main-jar "Programmieren-Testat-1.0.0.jar" `
+  --main-class "de.hsbi.programmieren.lwjgl3.Lwjgl3Launcher" `
+  --win-menu `
+  --win-shortcut `
+  --win-dir-chooser `
+  --icon ".\icon.ico"
