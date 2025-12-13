@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage; // Stage verwaltet Actors und Input für Scene2d UI
-import com.badlogic.gdx.scenes.scene2d.ui.Skin; // Skin enthält Styles, Drawables und Fonts für Widgets
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton; // TextButton ist ein UI-Widget mit Text
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport; // Listener für Zustandsänderungen (z. B. Klick)
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
 public class Main extends ApplicationAdapter {
@@ -37,7 +37,6 @@ public class Main extends ApplicationAdapter {
     private Stage stage; // Die Stage, auf der UI-Elemente liegen
     private Skin skin;   // Das Skin, das das Aussehen der Widgets definiert
     private TextButton button; // Der Button selbst
-
 
     @Override
     public void create() {
@@ -69,13 +68,13 @@ public class Main extends ApplicationAdapter {
         // Stage als Input-Processor setzen, damit Maus/Touch-Events an die Stage gehen
         Gdx.input.setInputProcessor(stage);
 
-        // Skin aus den internen Assets laden (uiskin.json muss im assets-Ordner liegen)
+        // Skin aus den internen Assets laden
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 
-        // TextButton erstellen: sichtbarer Text "Klick mich" und das geladene Skin verwenden
+        // TextButton erstellen
         button = new TextButton("Restart", skin);
 
-        // Position des Buttons in Stage-Koordinaten setzen (x=100, y=100)
+        // Position des Buttons in Stage-Koordinaten setzen
         button.setPosition(220, 100);
 
         // Größe des Buttons setzen (Breite=200, Höhe=50)
@@ -85,12 +84,14 @@ public class Main extends ApplicationAdapter {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+                // Button wurde geklickt - Spiel zurücksetzen
                 gameState = true;
                 currentLevel = 1;
                 player.setPoints(0);
                 enemy.setSpawnInterval(2.6f); // Verkürze das Spawn-Intervall (mehr Gegner)
                 enemy.setFallSpeed(180f);
 
+                // Hintergrundfarbe zurücksetzen
                 camera.update();
 
                 // Zeichne Coins und Spieler im selben ShapeRenderer-Durchlauf
@@ -125,8 +126,9 @@ public class Main extends ApplicationAdapter {
     // Render-Schleife
     @Override
     public void render() {
+        // Wenn das Spiel vorbei ist, keine Updates mehr durchführen
         if (gameState == false) {
-            return; // Spiel ist vorbei, keine Updates mehr
+            return;
         }
         handleInput();
 
@@ -142,6 +144,7 @@ public class Main extends ApplicationAdapter {
             levelChangeTimer = LEVEL_CHANGE_DURATION;
         }
 
+        // Levelwechsel-Pause behandeln
         if (levelChangeTimer > 0) {
             // Levelwechsel-Pause
             levelChangeTimer -= delta;
@@ -162,10 +165,11 @@ public class Main extends ApplicationAdapter {
         }
         // **********************************************
 
+        // Prüfe ob das Spiel gewonnen wurde
         if (player.getPoints() >= LEVEL_THRESHOLD2) {
             gameState = false;
 
-            // Gewonnen Hintergrundfarbe
+            // 'Gewonnen' Hintergrundfarbe
             Gdx.gl.glClearColor(0f, 1f, 0f, 1); // Grün für Gewonnen
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -180,14 +184,13 @@ public class Main extends ApplicationAdapter {
 
             // Stage aktualisieren: verarbeitet Input und Animationen (deltaTime sorgt für zeitbasiertes Verhalten)
             stage.act(Gdx.graphics.getDeltaTime());
-
             // Stage zeichnen: alle Actors (inkl. Button) werden gerendert
             stage.draw();
-
 
             return; // Breche die normale Render- und Update-Logik ab 
         }
 
+        // Eingaben verarbeiten
         handleInput();
 
         // Coins: spawn, bewegen, entfernen
@@ -217,7 +220,6 @@ public class Main extends ApplicationAdapter {
 
             // Stage aktualisieren: verarbeitet Input und Animationen (deltaTime sorgt für zeitbasiertes Verhalten)
             stage.act(Gdx.graphics.getDeltaTime());
-
             // Stage zeichnen: alle Actors (inkl. Button) werden gerendert
             stage.draw();
 
@@ -266,6 +268,7 @@ public class Main extends ApplicationAdapter {
     // Ressourcen freigeben
     @Override
     public void dispose() {
+        // Dispose aller genutzten Ressourcen
         batch.dispose();
         shapeRenderer.dispose();
         font.dispose();
@@ -273,6 +276,5 @@ public class Main extends ApplicationAdapter {
         // Ressourcen freigeben: wichtig, um Speicherlecks zu vermeiden
         stage.dispose(); // gibt Stage-Ressourcen frei
         skin.dispose();  // gibt Texturen/Fonts des Skins frei
-
     }
 }

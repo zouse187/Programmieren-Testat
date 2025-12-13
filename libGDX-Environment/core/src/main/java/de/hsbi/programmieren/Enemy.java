@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  * Enemy verwaltet feindliche Einheiten, die ähnlich wie Coins von oben fallen,
  * aber andere Parameter (Größe, Spawn-Rate, Geschwindigkeit) haben.
  *
- * Bei Kontakt mit dem Player wird dem Spieler ein Punkt abgezogen.
+ * Bei Kontakt mit dem Player ist das Spiel verloren.
  */
 public class Enemy {
     // Liste aktiver Gegner
@@ -28,6 +28,7 @@ public class Enemy {
     private final float enemyHeight = 25f;
     private float fallSpeed = 180f; // Fallgeschwindigkeit in Pixel/s
 
+    // Konstruktor
     public Enemy(float worldWidth, float worldHeight) {
         this.worldWidth = worldWidth;
         this.worldHeight = worldHeight;
@@ -47,11 +48,6 @@ public class Enemy {
     public void setFallSpeed(float newSpeed) {
         this.fallSpeed = newSpeed;
     }
-    
-    /**
-     * Update: spawnt neue Gegner und bewegt existierende nach unten.
-    // ... Rest der Klasse
-
 
     /**
      * Update: spawnt neue Gegner und bewegt existierende nach unten.

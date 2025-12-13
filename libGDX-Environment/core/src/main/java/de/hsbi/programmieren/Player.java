@@ -13,6 +13,7 @@ public class Player {
         this.points = 0;
     }
 
+    // setter für Punktestand (für Restart)
     public void setPoints(int points) {
         this.points = points;
     }
