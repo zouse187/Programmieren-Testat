@@ -36,7 +36,7 @@ assets/ui/ ├─ uiskin.json      # Skin-Definition für UI ├─ uiskin.atlas
    Dort findest du den **Setup-Tool** und die Dokumentation, um ein LibGDX‑Projekt einzurichten.
 
 2. Stelle sicher, dass **Java 21+** installiert ist.
-  - ACHRUNG!!! **Java 25** funktioniert stand jetzt (12.12.2025) noch nicht mit libGDX.
+  - ACHTUNG!!! **Java 25** funktioniert stand jetzt (12.12.2025) noch nicht mit libGDX.
 
 3. Projekt mit Gradle bauen:
    ```bash

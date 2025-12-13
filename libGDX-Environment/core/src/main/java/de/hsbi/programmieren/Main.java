@@ -27,8 +27,8 @@ public class Main extends ApplicationAdapter {
     private Enemy enemy;
 
     private int currentLevel = 1; // Startlevel
-    private final int LEVEL_THRESHOLD1 = 15; // Punkte, die für Level 2 erreicht werden müssen
-    private final int LEVEL_THRESHOLD2 = 40; // Punkte, die fürs gewinnen erreicht werden müssen
+    private final int pointsForLevel2 = 15; // Punkte, die für Level 2 erreicht werden müssen
+    private final int pointsForWin = 40; // Punkte, die fürs gewinnen erreicht werden müssen
     private float levelChangeTimer = 0f; // Timer für eine kurze Pause/Anzeige
     private final float LEVEL_CHANGE_DURATION = 2.0f; // 2 Sekunden Levelwechsel-Pause
 
@@ -136,7 +136,7 @@ public class Main extends ApplicationAdapter {
         // **********************************************
         // NEU: Levelwechsel-Logik
         // **********************************************
-        if (currentLevel == 1 && player.getPoints() >= LEVEL_THRESHOLD1) {
+        if (currentLevel == 1 && player.getPoints() >= pointsForLevel2) {
             currentLevel = 2;
             // Gegner-Parameter für Level 2 setzen (mehr Spawns)
             enemy.setSpawnInterval(0.5f); // Verkürze das Spawn-Intervall (mehr Gegner)
@@ -166,7 +166,7 @@ public class Main extends ApplicationAdapter {
         // **********************************************
 
         // Prüfe ob das Spiel gewonnen wurde
-        if (player.getPoints() >= LEVEL_THRESHOLD2) {
+        if (player.getPoints() >= pointsForWin) {
             gameState = false;
 
             // 'Gewonnen' Hintergrundfarbe
